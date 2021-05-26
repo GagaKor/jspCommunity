@@ -120,3 +120,8 @@ title = '제목5',
 
 # adminLevle 컬럼을  authLevel 로 변경
 ALTER TABLE jspcommunity.`member` CHANGE adminLevel authLevel tinyint(1) unsigned DEFAULT 2 NOT NULL COMMENT '0=탈퇴/1= 로그인정지/2=일반/3=인증/4=관리자';
+
+# cellphoneNo 추가 및 칼럼 순서 재정렬
+ALTER TABLE `member` CHANGE `loginId` `loginId` CHAR(50) NOT NULL AFTER `updateDate`,
+                     CHANGE `loginPw` `loginPw` VARCHAR(200) NOT NULL AFTER `loginId`,
+                     ADD COLUMN `cellphoneNo` CHAR(20) NOT NULL AFTER `email`; 

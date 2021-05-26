@@ -24,7 +24,7 @@ public class UsrDispatcherServlet extends DispatcherServlet {
 		String jspPath = null;
 		
 		if (controllerName.equals("member")) {
-			UsrMemberController memberController = Container.usrmemberController;
+			UsrMemberController memberController = Container.memberController;
 
 			if (actionMethodName.equals("list")) {
 				jspPath = memberController.showList(req, resp);

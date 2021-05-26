@@ -2,11 +2,13 @@ package com.koreait.container;
 
 import com.koreait.controller.AdmMemberController;
 import com.koreait.controller.UsrArticleController;
+import com.koreait.controller.UsrHomeController;
 import com.koreait.controller.UsrMemberController;
 import com.koreait.dao.ArticleDao;
 import com.koreait.dao.MemberDao;
 import com.koreait.service.ArticleService;
 import com.koreait.service.MemberService;
+
 
 public class Container {
 	public static ArticleService articleService;
@@ -17,6 +19,7 @@ public class Container {
 	public static MemberService memberService;
 	public static UsrMemberController memberController;
 	public static AdmMemberController admMemberController;
+	public static UsrHomeController homeController;
 
 	static {
 		memberDao = new MemberDao();
@@ -28,5 +31,6 @@ public class Container {
 		admMemberController = new AdmMemberController();
 		memberController = new UsrMemberController();
 		articleController = new UsrArticleController();
+		homeController = new UsrHomeController();
 	}
 }

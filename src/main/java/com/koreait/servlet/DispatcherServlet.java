@@ -9,7 +9,10 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
+import com.koreait.container.Container;
+import com.koreait.dto.Member;
 import com.koreait.mysql.MysqlUtil;
 
 public abstract class DispatcherServlet extends HttpServlet {
@@ -58,7 +61,24 @@ public abstract class DispatcherServlet extends HttpServlet {
 
 		String controllerName = requestUriBits[3];
 		String actionMethodName = requestUriBits[4];
+		
+		boolean isLogined= false;
+		int logindeMemberId =0;
+		Member loginedMember = null;
 
+		HttpSession session = req.getSession();
+		
+		if(session.getAttribute("loginedMemberId")!=null) {
+			isLogined = true;
+			logindeMemberId = (int)session.getAttribute("loginedMemberId");
+			loginedMember = Container.memberService.getMemberById(logindeMemberId);
+		}
+		
+		req.setAttribute("isLogined", isLogined);
+		req.setAttribute("logindeMemberId", logindeMemberId);
+		req.setAttribute("loginedMember", loginedMember);
+		
+		
 		Map<String, Object> rs = new HashMap<>();
 		rs.put("controllerName", controllerName);
 		rs.put("actionMethodName", actionMethodName);

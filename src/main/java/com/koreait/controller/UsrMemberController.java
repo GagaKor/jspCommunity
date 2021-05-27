@@ -12,6 +12,7 @@ import com.koreait.container.Container;
 import com.koreait.dto.Board;
 import com.koreait.dto.Member;
 import com.koreait.service.MemberService;
+import com.koreait.util.Util;
 import com.mysql.cj.Session;
 
 public class UsrMemberController {
@@ -129,15 +130,15 @@ public class UsrMemberController {
 	}
 
 	public String doLogout(HttpServletRequest req, HttpServletResponse resp) {
-		HttpSession session = req.getSession();
 
-		if (session.getAttribute("loginedMemberId") == null) {
+		if ((boolean)req.getAttribute("isLogined") == false) {
 			req.setAttribute("alertMsg", "이미 로그아웃 상태 입니다.");
 			req.setAttribute("historyBack", true);
 			
 			return "common/redirect";
 		}
 
+		HttpSession session = req.getSession();
 		session.removeAttribute("loginedMemberId");
 		req.setAttribute("alertMsg", "로그아웃 되었습니다.");
 		req.setAttribute("replaceUrl", "../home/main");
@@ -146,15 +147,25 @@ public class UsrMemberController {
 
 	public String getLoginIdDup(HttpServletRequest req, HttpServletResponse resp) {
 		String loginId = req.getParameter("loginId");
-		
+	
 		Member member = memberService.getMemberByLoginId(loginId);
-		String data = "";
+		Map<String, Object> rs = new HashMap<>();
+		
+		String resultCode = null;
+		String msg = null;
+		
 		if(member != null) {
-			data = "NO";
+			resultCode = "F-1";
+			msg = "이미 사용중인 아이디 입니다.";
 		}else {
-			data = "YES";
+			resultCode = "S-1";
+			msg = "사용 가능한 아이디 입니다..";
 		}
-		req.setAttribute("data", data);
+		rs.put("resultCode", resultCode);
+		rs.put("msg", msg);
+		rs.put("loginId", loginId);
+
+		req.setAttribute("data", Util.getJsonText(rs));
 		return "common/pure";
 	}
 

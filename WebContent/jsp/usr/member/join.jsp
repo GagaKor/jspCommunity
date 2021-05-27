@@ -9,6 +9,31 @@
 
 	<script type="text/javascript">
 		let DoJoinForm__submited = false;
+		let DoJoinForm__checkedLogin = "";
+		// 로그인 아이디 중복체크
+		function DoJoinForm__checkLoginIdDup(el){
+				const from = $(el).closest('form').get(0);
+				const loginId = from.loginId.value;
+				$.get(
+					"doLoginIdDup",
+					{
+					//loginId: loginId
+						loginId
+					},
+					function(data){
+						if(data == "YES"){
+							alert('해당 아이디는 사용이 가능합니다.')
+							DoJoinForm__checkedLogin = loginId;
+							}else{
+							alert('해당 아이디는 이미 사용중 입니다. ')
+							}
+					},
+					"html"
+					);
+				
+			}
+
+		//유효성 검사
 		function DoJoinForm__submit(form) {
 			if (DoJoinForm__submited) {
 				alert('처리중입니다.');
@@ -22,6 +47,14 @@
 
 				return;
 			}
+
+			if(form.loginId.value != DoJoinForm__checkedLogin){
+				alert('로그인 아이디를 중복검사를 해주세요.');
+				form.btnLoginIdDupCheck.focus();
+
+				return false;
+				}
+			
 
 			form.loginPw.value = form.loginPw.value.trim();
 			if (form.loginPw.value.length == 0) {
@@ -85,7 +118,9 @@
 			<div>
 				<input name="loginId" type="text" maxlength="50"
 					placeholder="로그인 아이디를 입력해주세요." />
+			<input type="button" onclick="DoJoinForm__checkLoginIdDup(this);" name="btnLoginIdDupCheck" value="중복체크">
 			</div>
+			
 		</div>
 
 		<hr />
@@ -94,7 +129,7 @@
 			<div>로그인 비번</div>
 			<div>
 				<input name="loginPw" type="password" maxlength="50"
-					placeholder="로그인 비번을 입력해주세요." />
+					placeholder="비밀번호" />
 			</div>
 		</div>
 		<hr />
@@ -102,7 +137,7 @@
 			<div>로그인 비번확인</div>
 			<div>
 				<input name="loginPwConfirm" type="password" maxlength="50"
-					placeholder="로그인 비번을 입력해주세요." />
+					placeholder="비밀번호 확인" />
 			</div>
 		</div>
 
